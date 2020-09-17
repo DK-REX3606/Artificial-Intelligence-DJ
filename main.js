@@ -1,5 +1,5 @@
 song="";
-function preLoad(){
+function preload(){
     song=loadSound("music.mp3");
 }
 scoreRightWrist=0;
@@ -8,7 +8,7 @@ rightWristX=0;
 rightWristY=0;
 leftWristX=0;
 leftWristY=0;
-function setUp(){
+function setup(){
     canvas=createCanvas(600,500);
     canvas.center();
     video=createCapture(VIDEO);
@@ -35,11 +35,42 @@ function gotPoses(results){
         leftWristX=results[0].pose.leftWrist.x;
         leftWristY=results[0].pose.leftWrist.y;
         console.log("rightWristX="+rightWristX+"rightWristY="+rightWristY);
-        console.log("leftWristX="+leftWristX+"leftWristY="+LeftWristY);
+        console.log("leftWristX="+leftWristX+"leftWristY="+leftWristY);
     }
 }
 function draw(){
-    image(video,0,0,0,600);
-    fill('#0000FF');
-    stroke('#008000');
+    image(video,0,0,600,500);
+    fill("blue");
+    stroke("green");
+    if (scoreRightWrist>0.2) {
+        circle(rightWristX,rightWristY,20);
+        if (rightWristY>0&&rightWristY<=100) {
+            document.getElementById("speed").innerHTML="speed=0.5x";
+            song.rate(0.5);
+        }
+        else if (rightWristY>100&&rightWristY<=200) {
+            document.getElementById("speed").innerHTML="speed=1.0x";
+            song.rate(1);
+        }
+        else if (rightWristY>200&&rightWristY<=300) {
+            document.getElementById("speed").innerHTML="speed=1.5x";
+            song.rate(1.5);
+        }
+        else if (rightWristY>300&&rightWristY<=400) {
+            document.getElementById("speed").innerHTML="speed=2.0x";
+            song.rate(2);
+        }
+        else if (rightWristY>400) {
+            document.getElementById("speed").innerHTML="speed=2.5x";
+            song.rate(2.5);
+        }
+    }
+    if (scoreLeftWrist>0.2) {
+        circle(leftWristX,leftWristY,20);
+        InNumberleftWristY=Number(leftWristY);
+        remove_decimals=floor(InNumberleftWristY);
+        volume=remove_decimals/500;
+        document.getElementById("volume").innerHTML="volume="+volume;
+        song.setVolume(volume);
+    }
 }
